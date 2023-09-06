@@ -1,7 +1,7 @@
 #define Output_Pin 9
 
 // Setare alfabet
-static String Letters[ ] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static String Letters[ ] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " "};
 static String Morse_Letters[ ] = {
   ".-", //A
   "-...", //B
@@ -39,6 +39,7 @@ static String Morse_Letters[ ] = {
   "--...", //7
   "---..", //8
   "----." //9
+  "_" // _
 };
 // Lungime alfabet
 int AlfabetLen;
@@ -87,7 +88,6 @@ void loop()
         
         for (int bar = 0; bar < DataOutLen; ++bar) {
           String c = DataOut.substring(bar, bar+1);
-          // Conversie din dit si dah in ton pentru buzzer
           if (c == ".") {
             tone(Output_Pin, 400);
             delay(Punct);
@@ -101,7 +101,12 @@ void loop()
             delay(Punct);
           }
         }
-        delay(Spatiu_litera);
+        if (c == " ") {
+          delay(Spatiu_Cuvinte);
+        }
+        else {
+          delay(Spatiu_litera);
+        }   
       }
    }
 }
