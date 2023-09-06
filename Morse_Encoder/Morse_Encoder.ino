@@ -43,7 +43,7 @@ static String Morse_Letters[ ] = {
 // Lungime alfabet
 int AlfabetLen;
 // Rules
-int Punct = 100;
+int Punct = 50;
 int Linie = 3 * Punct;
 int Spatiu_litera = Linie;
 int Spatiu_Cuvinte = 7 * Punct;
@@ -55,8 +55,8 @@ void setup()
   
   //Lungime alfabet
   AlfabetLen = sizeof(Letters) / 6;
-  Serial.print("Size: ");
-  Serial.println(AlfabetLen);
+  //Serial.print("Size: ");
+  //Serial.println(AlfabetLen);
 }
 
 String Search_Match(String caracter) {
@@ -70,38 +70,38 @@ String Search_Match(String caracter) {
 void loop()
 {
   if (Serial.available()/*Daca am comunicatie seriala*/){
-   String DataRead = Serial.readString(); // Citeste un sir de caractere terminate cu "enter"
-    
-   Serial.println(DataRead); // Afiseaza sirul initial
-    
+     String DataRead = Serial.readString(); // Citeste un sir de caractere terminate cu "enter"
+      
+     Serial.println(DataRead); // Afiseaza sirul initial
+      
      int Datalength = DataRead.length(); // Lungimea sirului
-    
-    for (int i = 0; i < Datalength; ++i){
-      String c = DataRead.substring(i, i+1); // Sparg sirul in caractere
-      Serial.print(c);
-      Serial.print(" ");
-      Serial.println(Search_Match(c));
       
-      String DataOut = Search_Match(c);
-      int DataOutLen = Search_Match(c).length();
-      
-      for (int bar = 0; bar < DataOutLen; ++bar) {
-        String c = DataOut.substring(bar, bar+1);
-        if (c == ".") {
-          tone(Output_Pin, 400);
-          delay(Punct);
-          noTone(Output_Pin);
-          delay(Punct);
+      for (int i = 0; i < Datalength - 1; ++i){
+        String c = DataRead.substring(i, i+1); // Sparg sirul in caractere
+        Serial.print(c);
+        Serial.print(" ");
+        Serial.println(Search_Match(c));
+        
+        String DataOut = Search_Match(c);
+        int DataOutLen = Search_Match(c).length();
+        
+        for (int bar = 0; bar < DataOutLen; ++bar) {
+          String c = DataOut.substring(bar, bar+1);
+          // Conversie din dit si dah in ton pentru buzzer
+          if (c == ".") {
+            tone(Output_Pin, 400);
+            delay(Punct);
+            noTone(Output_Pin);
+            delay(Punct);
+          }
+          if (c == "-") {
+            tone(Output_Pin, 400);
+            delay(Linie);
+            noTone(Output_Pin);
+            delay(Punct);
+          }
         }
-        if (c == "-") {
-          tone(Output_Pin, 400);
-          delay(Linie);
-          noTone(Output_Pin);
-          delay(Punct);
-        }
+        delay(Spatiu_litera);
       }
-      delay(Spatiu_litera);
-    }
-  }
-  //delay(500);
+   }
 }
